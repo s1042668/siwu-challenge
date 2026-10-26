@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>四勿挑戰｜講師操作版</title>
+<style>
+:root{font-family:'Noto Sans TC','Microsoft JhengHei',system-ui,sans-serif;color:#2e2925;background:#f6eee0}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 85% 15%,#fce8b8,transparent 35%),linear-gradient(135deg,#f9f1df,#e9e1d2)}.wrap{max-width:1100px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.tag{background:#6c3e2b;color:#fff;padding:8px 17px;border-radius:99px;font-weight:700}.small{font-size:clamp(15px,2vw,20px);color:#75675b}h1{font-size:clamp(38px,6vw,76px);margin:24px 0 8px;color:#773c28;letter-spacing:.1em}p{margin:0}.panel{margin-top:25px;border:3px solid #a77d4c;border-radius:24px;padding:clamp(24px,5vw,60px);min-height:420px;background:#fffaf0;box-shadow:0 16px 35px #53371b20;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:25px}.number{font-size:clamp(18px,2.4vw,28px);color:#91663b;font-weight:800}.question{font-size:clamp(28px,4.1vw,50px);font-weight:800;line-height:1.55;max-width:900px}.answer{font-size:clamp(29px,4.8vw,57px);font-weight:900;color:#9b4029;background:#f8e9cc;border-radius:15px;padding:12px 30px}.hint{font-size:clamp(16px,2vw,22px);color:#867568}.actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:26px 0}button{border:0;border-radius:13px;padding:16px 26px;font-size:clamp(17px,2vw,23px);font-weight:800;cursor:pointer;background:#e9d5b3;color:#563e2d}button:hover:not(:disabled){filter:brightness(.94)}button:focus-visible{outline:4px solid #db983d;outline-offset:3px}button.primary{background:#85422b;color:white}button:disabled{opacity:.35;cursor:not-allowed}.footer{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;color:#7e6d60}.key{font-size:14px}body.presentation .wrap{max-width:1500px}body.presentation .panel{min-height:60vh}@media(max-width:600px){.wrap{padding:14px}.panel{min-height:360px}.actions button{flex:1 1 40%}.footer{justify-content:center}}
+</style>
+</head>
+<body><main class="wrap"><div class="top"><span class="tag">論語修行九宮格 · 四勿挑戰</span><span class="small" id="progress">第 1 / 12 題</span></div><h1>四勿挑戰</h1><p class="small">聽到問題後，迅速到黑板寫上你的答案！</p><section class="panel" aria-live="polite"><div class="number" id="number">情境 01</div><div class="question" id="question"></div><div class="answer" id="answer" hidden></div><div class="hint" id="hint">先作答，再公布答案</div></section><nav class="actions" aria-label="題目操作"><button id="prev">← 上一題</button><button class="primary" id="reveal">公布答案</button><button id="next">下一題 →</button><button id="restart">↺ 重新開始</button><button id="full">⛶ 全螢幕</button></nav><div class="footer"><span>四勿：非禮勿視 · 非禮勿聽 · 非禮勿言 · 非禮勿動</span><span class="key">快捷鍵：← → 切題｜空白鍵公布／隱藏答案</span></div></main>
+<script>
+const questions=[
+{q:'朋友開始說別人的壞話，你明知道不妥，卻繼續聽得津津有味。',a:'非禮勿聽'},
+{q:'生氣時，故意說出對方最在意的缺點來傷害他。',a:'非禮勿言'},
+{q:'看到別人的私人訊息或聊天紀錄，忍不住偷看。',a:'非禮勿視'},
+{q:'明知道不該插隊，卻因為趕時間而直接插到別人前面。',a:'非禮勿動'},
+{q:'明知道事情還沒查證，卻在群組裡散播不實消息。',a:'非禮勿言'},
+{q:'聽到未經證實的八卦，仍然想知道更多細節。',a:'非禮勿聽'},
+{q:'明知道某個網路影片內容不適當，卻因為好奇一直看。',a:'非禮勿視'},
+{q:'因為一時生氣，故意把別人的東西藏起來或弄亂。',a:'非禮勿動'},
+{q:'團隊合作時，因為不滿別人的表現，就用嘲諷的語氣批評對方。',a:'非禮勿言'},
+{q:'有人想告訴你另一位朋友的私人秘密，你沒有阻止，反而鼓勵他繼續說。',a:'非禮勿聽'},
+{q:'在網路上看到有人被嘲笑，還一直關注那些羞辱人的留言。',a:'非禮勿視'},
+{q:'明知道答應要完成工作，卻因為想偷懶而故意不做。',a:'非禮勿動'}];
+let index=0,shown=false;const $=id=>document.getElementById(id);function render(){let item=questions[index];$('progress').textContent=`第 ${index+1} / ${questions.length} 題`;$('number').textContent=`情境 ${String(index+1).padStart(2,'0')}`;$('question').textContent=item.q;$('answer').textContent=item.a;$('answer').hidden=!shown;$('hint').hidden=shown;$('reveal').textContent=shown?'隱藏答案':'公布答案';$('prev').disabled=index===0;$('next').disabled=index===questions.length-1}function go(n){if(n>=0&&n<questions.length){index=n;shown=false;render()}}$('prev').onclick=()=>go(index-1);$('next').onclick=()=>go(index+1);$('reveal').onclick=()=>{shown=!shown;render()};$('restart').onclick=()=>{index=0;shown=false;render()};$('full').onclick=()=>{if(!document.fullscreenElement){document.documentElement.requestFullscreen?.()}else{document.exitFullscreen?.()}};document.addEventListener('fullscreenchange',()=>document.body.classList.toggle('presentation',!!document.fullscreenElement));document.addEventListener('keydown',e=>{if(e.target.closest('button'))return;if(e.key==='ArrowRight')go(index+1);if(e.key==='ArrowLeft')go(index-1);if(e.code==='Space'){e.preventDefault();shown=!shown;render()}});render();
+</script></body></html>
